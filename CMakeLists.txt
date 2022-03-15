@@ -1,0 +1,8 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
+PROJECT(hw1-26)
+SET(CMAKE_C_STANDARD 11)
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
+
+ENABLE_TESTING()
+
+add_subdirectory(project)
