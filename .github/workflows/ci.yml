@@ -8,7 +8,13 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
+      - run: apt install clang-tidy wget --yes
+      - run: mkdir build
+      - run: cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug
+      - run: cd build && wget https://github.com/llvm-mirror/clang-tools-extra/blob/master/clang-tidy/tool/run-clang-tidy.py
+      - run: cd build && python3 run-clang-tidy.py
       - name: Run clang-tidy
+      
         uses: HorstBaerbel/action-clang-tidy@1.2
         with:
           scandir: '.'

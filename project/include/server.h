@@ -5,7 +5,7 @@
 
 enum ERROR_CODES {
     SUCCESS = 0,
-    INPUT_ERROR = 2,
+    INPUT_ERROR,
     INCORRECT_INPUT,
     NULLPTR_ERROR,
     MEMORY_ERROR
@@ -20,8 +20,6 @@ typedef struct Server {
     int cpus;
     int cores;
 } Server;
-
-typedef unsigned char uchar;
 
 int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar netmask[], int cpus, int cores);
 
