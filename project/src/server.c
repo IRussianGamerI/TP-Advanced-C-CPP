@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int init_server(Server* server, const uchar dns[], const uchar ip[], const uchar netmask[], int cpus
-                , int cores) {
+int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar netmask[], int cpus, int cores) {
     if (!server || !dns || !ip || !netmask) {
         return NULLPTR_ERROR;
     }
+    int a = 0;
     memcpy(server->dns, dns, 4);
     memcpy(server->ip, ip, 4);
     memcpy(server->netmask, netmask, 4);
