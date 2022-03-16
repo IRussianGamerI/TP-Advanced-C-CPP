@@ -1,5 +1,5 @@
-#ifndef TP_ADVANCED_C_CPP_PROJECT_INCLUDE_SERVER_H_
-#define TP_ADVANCED_C_CPP_PROJECT_INCLUDE_SERVER_H_
+#ifndef PROJECT_INCLUDE_SERVER_H_
+#define PROJECT_INCLUDE_SERVER_H_
 
 #define BUF_SIZE 16
 
@@ -35,4 +35,4 @@ int compare_ip(const uchar *ip1, const uchar *ip2);
 
 int print_server(const Server *server);
 
-#endif  // TP_ADVANCED_C_CPP_PROJECT_INCLUDE_SERVER_H_
+#endif  // PROJECT_INCLUDE_SERVER_H_
