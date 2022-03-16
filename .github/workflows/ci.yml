@@ -5,6 +5,7 @@ on:
 jobs: 
   formatting-check:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
       
@@ -14,6 +15,6 @@ jobs:
       - name: Run cppcheck
         run: cppcheck project --enable=all --inconclusive --error-exitcode=1 -I project/include --suppress=missingIncludeSystem
       
-      -name: Run cpplint
+      - name: Run cpplint
         run: cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/include/* project/src/* 
       
