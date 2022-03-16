@@ -1,0 +1,18 @@
+on:
+  push:
+    branches: [ making-hw-1 ]
+
+jobs: 
+  formatting-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run clang-tidy
+        uses: HorstBaerbel/action-clang-tidy@1.2
+        with:
+          scandir: 'project'
+          builddir: 'build'
+          excludedirs: ''
+          extensions: 'c,h'
+          cmakeoptions: ''
