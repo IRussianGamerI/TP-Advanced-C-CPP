@@ -13,6 +13,5 @@ jobs:
       - run: sudo apt install clang-tidy wget --yes
       
       - name: Run clang-tidy
-      - run: mkdir build && cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug && wget 
-      https://github.com/llvm-mirror/clang-tools-extra/blob/master/clang-tidy/tool/run-clang-tidy.py
-      && python3 run-clang-tidy.py
+      - run: mkdir build && cd build && cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug && wget https://github.com/llvm-mirror/clang-tools-extra/blob/master/clang-tidy/tool/run-clang-tidy.py && python3 run-clang-tidy.py
+        
