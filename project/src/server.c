@@ -15,27 +15,10 @@ int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar
     return SUCCESS;
 }
 
-Server *create_server_array(unsigned size) {
-    if (!size) {
-        printf("Array could not be created\n");
-        return NULL;
-    }
-    Server *array = malloc(size * sizeof(Server));
-    if (!array) {
-        printf("Unable to allocate memory\n");
-        return NULL;
-    }
-    return array;
-}
-
-void free_server_array(Server *array) {
-    free(array);
-}
-
 int read_ip(uchar *ip, char *msg) {
     char buf[BUF_SIZE];
     printf("Enter %s: ", msg);
-    if (!scanf("%16s", buf)) {
+    if (!scanf("%15s", buf)) {
         printf("Cannot read dns-name!\n");
         return INPUT_ERROR;
     }

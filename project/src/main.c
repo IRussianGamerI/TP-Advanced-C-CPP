@@ -3,7 +3,7 @@
 #include "group_of_networks.h"
 
 int main() {
-    size_t n;
+    ssize_t n;
     fprintf(stdout, "Enter the amount of servers: ");
     if (fscanf(stdin, "%zd", &n) != 1) {
         fprintf(stdout, "You entered incorrect number\n");
@@ -12,9 +12,9 @@ int main() {
     Server current;  // Сервер, только что введенный с клавиатуры
     Group group;
     init_group(&group);  // Инициализация пустой группы
-    for (size_t i = 0; i < n; ++i) {
+    for (ssize_t i = 0; i < n; ++i) {
         if (read_ip(current.dns, "DNS") != SUCCESS) {
-            return INPUT_ERROR; 
+            return INPUT_ERROR;
         }
 
         if (read_ip(current.ip, "IP") != SUCCESS) {
@@ -41,7 +41,7 @@ int main() {
     }
 
     if (print_by_networks(&group) != SUCCESS) {
-        return NULLPTR_ERROR; 
+        return NULLPTR_ERROR;
     }
     destroy_group(&group);
     return 0;

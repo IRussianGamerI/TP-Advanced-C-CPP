@@ -1,5 +1,5 @@
-#ifndef PROJECT_INCLUDE_SERVER_H_
-#define PROJECT_INCLUDE_SERVER_H_
+#ifndef TP_ADVANCED_C_CPP_PROJECT_INCLUDE_SERVER_H_
+#define TP_ADVANCED_C_CPP_PROJECT_INCLUDE_SERVER_H_
 
 #define BUF_SIZE 16
 
@@ -23,10 +23,6 @@ typedef struct Server {
 
 int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar netmask[], int cpus, int cores);
 
-Server *create_server_array(unsigned size);
-
-void free_server_array(Server *array);
-
 int extract_ip(char *from, uchar *to);
 
 int read_ip(uchar *ip, char *msg);
@@ -39,4 +35,4 @@ int compare_ip(const uchar *ip1, const uchar *ip2);
 
 int print_server(const Server *server);
 
-#endif  // PROJECT_INCLUDE_SERVER_H_
+#endif  // TP_ADVANCED_C_CPP_PROJECT_INCLUDE_SERVER_H_

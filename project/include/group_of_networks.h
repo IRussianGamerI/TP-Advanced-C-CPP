@@ -1,5 +1,5 @@
-#ifndef PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
-#define PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
+#ifndef TP_ADVANCED_C_CPP_PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
+#define TP_ADVANCED_C_CPP_PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
 
 #include "server.h"
 
@@ -23,4 +23,4 @@ int add_to_network(Group *group, const Server *server);
 
 int print_by_networks(const Group *group);
 
-#endif  // PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
+#endif  // TP_ADVANCED_C_CPP_PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
