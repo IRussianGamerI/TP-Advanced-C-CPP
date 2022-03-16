@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Install all
-        run: sudo apt install cppcheck cpplint --yes
+        run: sudo apt install cppcheck pip --yes && sudo pip install cpplint
       
       - name: Run cppcheck
         run: cppcheck project --enable=all --inconclusive --error-exitcode=1 -I project/include --suppress=missingIncludeSystem
