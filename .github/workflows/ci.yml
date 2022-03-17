@@ -17,6 +17,7 @@ jobs:
           sudo apt install cppcheck pip --yes
           sudo pip install cpplint
           git clone https://github.com/google/googletest.git -b release-1.11.0
+          sudo apt install gcovr
           cd googletest
           mkdir build
           cd build
@@ -34,7 +35,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake ../CMakeLists.txt
+          cmake ..
           make
 
       - name: Run GTest
@@ -49,7 +50,6 @@ jobs:
 
       - name: Coverage
         run: |
-          sudo apt install gcovr
           cd build
           mkdir coverage-report
           cd coverage-report
