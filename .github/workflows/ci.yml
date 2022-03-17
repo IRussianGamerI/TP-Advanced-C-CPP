@@ -16,7 +16,6 @@ jobs:
         run: |
           sudo apt install cppcheck pip --yes
           sudo pip install cpplint
-          cd googletest
           mkdir build
           cd build
           cmake .. -DBUILD_GMOCK=OFF
