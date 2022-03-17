@@ -46,7 +46,7 @@ jobs:
       - name: Run GTest with Valgrind
         run: |
           cd build
-          valgrind --leak-check=full --error-exitcode=0 ./test_lib
+          valgrind --tool=memcheck --leak-check=yes ./test_lib
 
       - name: Coverage
         run: |
