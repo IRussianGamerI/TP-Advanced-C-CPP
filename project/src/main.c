@@ -13,15 +13,15 @@ int main() {
     Group group;
     init_group(&group);  // Инициализация пустой группы
     for (ssize_t i = 0; i < n; ++i) {
-        if (read_ip(current.dns, "DNS") != SUCCESS) {
+        if (read_ip(stdin, current.dns, "DNS") != SUCCESS) {
             return INPUT_ERROR;
         }
 
-        if (read_ip(current.ip, "IP") != SUCCESS) {
+        if (read_ip(stdin, current.ip, "IP") != SUCCESS) {
             return INPUT_ERROR;
         }
 
-        if (read_ip(current.netmask, "Netmask") != SUCCESS) {
+        if (read_ip(stdin, current.netmask, "Netmask") != SUCCESS) {
             return INPUT_ERROR;
         }
 

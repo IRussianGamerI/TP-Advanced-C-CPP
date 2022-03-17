@@ -1,20 +1,37 @@
 on:
   push:
     branches: [ making-hw-1 ]
+  
+  pull_request:
+    branches: [ making-hw-1 ]
 
-jobs: 
-  formatting-check:
+jobs:
+  tests:
     runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Install all
-        run: sudo apt install cppcheck pip --yes && sudo pip install cpplint
-      
+
+      - name: Install
+        run: |
+          sudo apt install cppcheck pip --yes
+          sudo pip install cpplint
+          cd googletest
+          mkdir build
+          cd build
+          cmake .. -DBUILD_GMOCK=OFF
+          make
+          sudo make install
+
       - name: Run cppcheck
         run: cppcheck project --enable=all --inconclusive --error-exitcode=1 -I project/include --suppress=missingIncludeSystem
-      
+
       - name: Run cpplint
-        run: cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/include/* project/src/* 
-      
+        run: cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/include/* project/src/*
+
+      - name: Build
+        run: |
+          cmake CMakeLists.txt
+          make
+      - name: Run GTest
+        run: ./test_lib

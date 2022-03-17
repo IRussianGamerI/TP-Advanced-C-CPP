@@ -15,9 +15,13 @@ typedef struct Group {
     Network *nets;
 } Group;
 
-void init_group(Group *group);
+int init_network(Network *net);
 
-void destroy_group(Group *group);
+int destroy_network(Network *net);
+
+int init_group(Group *group);
+
+int destroy_group(Group *group);
 
 int add_to_network(Group *group, const Server *server);
 

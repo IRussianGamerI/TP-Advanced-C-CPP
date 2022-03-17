@@ -7,6 +7,9 @@ int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar
     if (!server || !dns || !ip || !netmask) {
         return NULLPTR_ERROR;
     }
+    if (cpus < 0 || cores < 0) {
+        return INCORRECT_NUMBER;
+    }
     memcpy(server->dns, dns, 4);
     memcpy(server->ip, ip, 4);
     memcpy(server->netmask, netmask, 4);
@@ -15,17 +18,23 @@ int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar
     return SUCCESS;
 }
 
-int read_ip(uchar *ip, char *msg) {
-    char buf[BUF_SIZE];
+int read_ip(FILE *in, uchar *ip, const char *msg) {
+    if (!in || !ip || !msg) {
+        return NULLPTR_ERROR;
+    }
+    char buf[BUF_SIZE] = {0};
     printf("Enter %s: ", msg);
-    if (!scanf("%15s", buf)) {
+    if (!fscanf(in, "%15s", buf)) {
         printf("Cannot read dns-name!\n");
         return INPUT_ERROR;
     }
     return extract_ip(buf, ip);
 }
 
-int str_count(char *str, char sym) {
+int str_count(const char *str, char sym) {
+    if (str == NULL || sym == '\0') {
+        return 0;
+    }
     int cnt = 0;
     for (unsigned i = 0; i < strnlen(str, BUF_SIZE); ++i) {
         if (str[i] == sym) {
@@ -35,36 +44,57 @@ int str_count(char *str, char sym) {
     return cnt;
 }
 
-int extract_ip(char *from, uchar *to) {
-    if (str_count(from, '.') != 3) {
+int extract_ip(const char *from, uchar *to) {
+    if (!from || !to) {
+        return NULLPTR_ERROR;
+    }
+    char *from_cpy = calloc(16, sizeof(char));
+    char *origin = from_cpy;
+    if (!from_cpy) {
+        free(origin);
+        return MEMORY_ERROR;
+    }
+    strncpy(from_cpy, from, 15);
+    if (str_count(from_cpy, '.') != 3) {
         printf("Entered IPv4 address is incorrect!\n");
+        free(origin);
         return INCORRECT_INPUT;
     }
-    char *cur = strtok_r(from, ".", &from);
+    char *cur = strtok_r(from_cpy, ".", &from_cpy);
+    if (!cur) {
+        printf("Entered IPv4 address is incorrect!\n");
+        free(origin);
+        return INCORRECT_INPUT;
+    }
     if (strnlen(cur, 4) > 3) {
         printf("Entered IPv4 address is incorrect!\n");
+        free(origin);
         return INCORRECT_INPUT;
     }
-    int byte;
+    unsigned byte;
     byte = strtoul(cur, NULL, 10);
     if (byte > 255) {
         printf("Entered IPv4 address is incorrect!\n");
+        free(origin);
         return INCORRECT_INPUT;
     }
     to[0] = byte;
     for (int i = 1; i < 4; ++i) {
-        cur = strtok_r(NULL, ".", &from);
+        cur = strtok_r(from_cpy, ".", &from_cpy);
         if (strnlen(cur, 4) > 3) {
             printf("Entered IPv4 address is incorrect!\n");
+            free(origin);
             return INCORRECT_INPUT;
         }
         byte = strtoul(cur, NULL, 10);
         if (byte > 255) {
             printf("Entered IPv4 address is incorrect!\n");
+            free(origin);
             return INCORRECT_INPUT;
         }
         to[i] = byte;
     }
+    free(origin);
     return SUCCESS;
 }
 
@@ -80,7 +110,7 @@ int get_network_address(const Server *server, uchar *result) {
 
 int compare_ip(const uchar *ip1, const uchar *ip2) {
     if (!ip1 || !ip2) {
-        return NULLPTR_ERROR;
+        return 0;
     }
     return (ip1[0] == ip2[0] &&
             ip1[1] == ip2[1] &&
@@ -101,5 +131,3 @@ int print_server(const Server *server) {
     printf("Cores: %d\n", server->cores);
     return SUCCESS;
 }
-
-

@@ -1,6 +1,8 @@
 #ifndef PROJECT_INCLUDE_SERVER_H_
 #define PROJECT_INCLUDE_SERVER_H_
 
+#include <stdio.h>
+
 #define BUF_SIZE 16
 
 enum ERROR_CODES {
@@ -8,7 +10,8 @@ enum ERROR_CODES {
     INPUT_ERROR,
     INCORRECT_INPUT,
     NULLPTR_ERROR,
-    MEMORY_ERROR
+    MEMORY_ERROR,
+    INCORRECT_NUMBER
 };
 
 typedef unsigned char uchar;
@@ -23,11 +26,11 @@ typedef struct Server {
 
 int init_server(Server *server, const uchar dns[], const uchar ip[], const uchar netmask[], int cpus, int cores);
 
-int extract_ip(char *from, uchar *to);
+int extract_ip(const char *from, uchar *to);
 
-int read_ip(uchar *ip, char *msg);
+int read_ip(FILE *in, uchar *ip, const char *msg);
 
-int str_count(char *str, char sym);
+int str_count(const char *str, char sym);
 
 int get_network_address(const Server *server, uchar *result);
 
