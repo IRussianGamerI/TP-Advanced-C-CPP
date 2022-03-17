@@ -85,6 +85,12 @@ TEST(READ_IP_TEST, nullptr_params) {
     EXPECT_EQ(read_ip(stdin, NULL, NULL), NULLPTR_ERROR);
 }
 
+TEST(READ_IP_TEST, correct_params) {
+    uchar ip[4] = {0};
+    FILE *in = fmemopen((void *) "192.168.1.1", 12, "r");
+    EXPECT_EQ(read_ip(in, ip, "Correct test"), SUCCESS);
+}
+
 TEST(COMPARE_IP_TEST, correct_ip_ptr) {
     uchar ip1[4] = {1, 2, 3, 4};
     uchar ip2[4] = {1, 2, 3, 4};

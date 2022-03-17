@@ -32,7 +32,25 @@ jobs:
 
       - name: Build
         run: |
-          cmake CMakeLists.txt
+          mkdir build
+          cd build
+          cmake ../CMakeLists.txt
           make
+
       - name: Run GTest
-        run: ./test_lib
+        run: |
+          cd build
+          ./test_lib
+
+      - name: Run GTest with Valgrind
+        run: |
+          cd build
+          valgrind --leak-check=full --error-exitcode=0 ./test_lib
+
+      - name: Coverage
+        run: |
+          sudo apt install gcovr
+          cd build
+          mkdir coverage-report
+          cd coverage-report
+          gcovr -r ../../ --html --html-details --filter ../../project/src/ -o coverage-report.html
