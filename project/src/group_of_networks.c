@@ -9,7 +9,7 @@ int init_network(Network *net) {
     net->size = 0;
     net->mem_size = 0;
     net->servers = malloc(sizeof(Server));
-    if (!net->servers){
+    if (!net->servers) {
         return MEMORY_ERROR;
     }
     return SUCCESS;
