@@ -33,7 +33,7 @@ jobs:
         run: |
           git clone https://github.com/google/googletest.git -b release-1.11.0
           sudo apt update && sudo apt install valgrind
-          sudo apt install gcovr
+          pip install gcovr
           cd googletest
           mkdir build
           cd build
@@ -66,6 +66,7 @@ jobs:
           gcovr -r ../../ --filter ../../project/src/ -o coverage-report.xml --xml
       - name: Upload coverage report
         uses: codecov/codecov-action@v2
+        run: cat codecov.yml | curl --data-binary @- https://codecov.io/validate
         with:
           token: 44f13f3e-0ded-4ca7-8ca1-6f9182297590
           files: ./build/coverage-report/coverage-report.xml
