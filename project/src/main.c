@@ -15,7 +15,7 @@ int main() {
     init_group(&group);  // Инициализация пустой группы
     for (ssize_t i = 0; i < n; ++i) {
         read_server(stdin, &current);
-        if (add_to_network(&group, &current) != SUCCESS) {
+        if (add_to_group(&group, &current) != SUCCESS) {
             return MEMORY_ERROR;
         }
     }
