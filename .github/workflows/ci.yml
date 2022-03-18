@@ -63,10 +63,11 @@ jobs:
           cd build
           mkdir coverage-report
           cd coverage-report
-          gcovr -r ../../ --filter ../../project/src/ -o coverage-report.xml --xml
-          run: cat codecov.yml | curl --data-binary @- https://codecov.io/validate
+          gcovr -r ../../ --html --html-details --filter ../../project/src/ -o coverage-report.html
+          
       - name: Upload coverage report
-        uses: codecov/codecov-action@v2
-        with:
-          token: 44f13f3e-0ded-4ca7-8ca1-6f9182297590
-          files: ./build/coverage-report/coverage-report.xml
+        uses: actions/upload-artifact@v2
+          with:
+            name: сoverage report
+            path: build/coverage-report
+            
