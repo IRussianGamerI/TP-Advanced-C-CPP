@@ -5,24 +5,24 @@ extern "C" {
 #include "group_of_networks.h"
 }
 
-TEST(INIT_SERVER_TEST, correct_data) {
-    Server server;
+TEST(InitServerTest, CorrectData) {
+    server_t server;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
     EXPECT_EQ(init_server(&server, dns, ip, netmask, 4, 16), SUCCESS);
 }
 
-TEST(INIT_SERVER_TEST, nullptr_server) {
-    Server *server = NULL;
+TEST(InitServerTest, NullptrServer) {
+    server_t *server = NULL;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
     EXPECT_EQ(init_server(server, dns, ip, netmask, 4, 16), NULLPTR_ERROR);
 }
 
-TEST(INIT_SERVER_TEST, nullptr_ip_dns_netmask) {
-    Server server;
+TEST(InitServerTest, NullptrIpDnsNetmask) {
+    server_t server;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
@@ -31,8 +31,8 @@ TEST(INIT_SERVER_TEST, nullptr_ip_dns_netmask) {
     EXPECT_EQ(init_server(&server, dns, ip, NULL, 4, 16), NULLPTR_ERROR);
 }
 
-TEST(INIT_SERVER_TEST, cpus_cores_negative_number) {
-    Server server;
+TEST(InitServerTest, CpusCoresNegativeNumber) {
+    server_t server;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
@@ -40,18 +40,18 @@ TEST(INIT_SERVER_TEST, cpus_cores_negative_number) {
     EXPECT_EQ(init_server(&server, dns, ip, netmask, 4, -1), INCORRECT_NUMBER);
 }
 
-TEST(STR_COUNT_TEST, correct_str) {
+TEST(StrCountTest, CorrectStr) {
     EXPECT_EQ(str_count("192.168.1.1", '.'), 3);
     EXPECT_EQ(str_count("192.16811", '.'), 1);
     EXPECT_EQ(str_count("19216811", '.'), 0);
 }
 
-TEST(STR_COUNT_TEST, null_input) {
+TEST(StrCountTest, NullInput) {
     EXPECT_EQ(str_count(NULL, '.'), 0);
     EXPECT_EQ(str_count("192.168.1.1", (char) 0), 0);
 }
 
-TEST(EXTRACT_IP_TEST, correct_ip) {
+TEST(ExtractIpTest, CorrectIp) {
     uchar to[4];
     EXPECT_EQ(extract_ip("192.168.1.1", to), SUCCESS);
     EXPECT_EQ(to[0], 192);
@@ -60,13 +60,13 @@ TEST(EXTRACT_IP_TEST, correct_ip) {
     EXPECT_EQ(to[3], 1);
 }
 
-TEST(EXTRACT_IP_TEST, nullptr_params) {
+TEST(ExtractIpTest, NullptrParams) {
     uchar to[4];
     EXPECT_EQ(extract_ip("192.168.1.1", NULL), NULLPTR_ERROR);
     EXPECT_EQ(extract_ip(NULL, to), NULLPTR_ERROR);
 }
 
-TEST(EXTRACT_IP_TEST, invalid_ip) {
+TEST(ExtractIpTest, InvalidIp) {
     uchar to[4];
     EXPECT_EQ(extract_ip("1234", to), INCORRECT_INPUT);
     EXPECT_EQ(extract_ip("...", to), INCORRECT_INPUT);
@@ -77,7 +77,7 @@ TEST(EXTRACT_IP_TEST, invalid_ip) {
     EXPECT_EQ(extract_ip("-1.-1.-1.-1", to), INCORRECT_INPUT);
 }
 
-TEST(READ_IP_TEST, nullptr_params) {
+TEST(ReadIpTest, NullptrParams) {
     uchar ip[4] = {124, 68, 222, 51};
     const char *msg = "Nothing here";
     EXPECT_EQ(read_ip(NULL, ip, msg), NULLPTR_ERROR);
@@ -85,13 +85,13 @@ TEST(READ_IP_TEST, nullptr_params) {
     EXPECT_EQ(read_ip(stdin, NULL, NULL), NULLPTR_ERROR);
 }
 
-TEST(READ_IP_TEST, correct_params) {
+TEST(ReadIpTest, CorrectParams) {
     uchar ip[4] = {0};
     FILE *in = fmemopen((void *) "192.168.1.1", 12, "r");
     EXPECT_EQ(read_ip(in, ip, "Correct test"), SUCCESS);
 }
 
-TEST(COMPARE_IP_TEST, correct_ip_ptr) {
+TEST(CompareIpTest, CorrectIpPtr) {
     uchar ip1[4] = {1, 2, 3, 4};
     uchar ip2[4] = {1, 2, 3, 4};
     EXPECT_EQ(compare_ip(ip1, ip2), true);
@@ -99,14 +99,14 @@ TEST(COMPARE_IP_TEST, correct_ip_ptr) {
     EXPECT_EQ(compare_ip(ip1, ip2), false);
 }
 
-TEST(COMPARE_IP_TEST, nullptr_params) {
+TEST(CompareIpTest, NullptrParams) {
     uchar ip[4] = {1, 2, 3, 4};
     EXPECT_EQ(compare_ip(ip, NULL), 0);
     EXPECT_EQ(compare_ip(NULL, ip), 0);
 }
 
-TEST(PRINT_SERVER, correct_server) {
-    Server server;
+TEST(PrintServer, CorrectServer) {
+    server_t server;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
@@ -114,93 +114,118 @@ TEST(PRINT_SERVER, correct_server) {
     EXPECT_EQ(print_server(&server), SUCCESS);
 }
 
-TEST(PRINT_SERVER, nullptr_server) {
-    Server *not_a_server = NULL;
+TEST(ReadServer, Everything) {
+    server_t server;
+    FILE *in = fmemopen((void *) "", 0, "r");
+    EXPECT_EQ(read_server(in, &server), INPUT_ERROR);
+    fclose(in);
+    in = fmemopen((void *) "192.168.1.1", strlen("192.168.1.1"), "r");
+    EXPECT_EQ(read_server(in, &server), INPUT_ERROR);
+    fclose(in);
+    in = fmemopen((void *) "192.168.1.1\n122.123.1.1", strlen("192.168.1.1\n122.123.1.1"), "r");
+    EXPECT_EQ(read_server(in, &server), INPUT_ERROR);
+    fclose(in);
+    in = fmemopen((void *) "192.168.1.1\n122.123.1.1\n1.11.1.1",
+                  strlen("192.168.1.1\n122.123.1.1\n1.11.1.1"), "r");
+    EXPECT_EQ(read_server(in, &server), INPUT_ERROR);
+    fclose(in);
+    in = fmemopen((void *) "192.168.1.1\n122.123.1.1\n1.11.1.1\n4",
+                  strlen("192.168.1.1\n122.123.1.1\n1.11.1.1\n4"), "r");
+    EXPECT_EQ(read_server(in, &server), INPUT_ERROR);
+    fclose(in);
+    in = fmemopen((void *) "192.168.1.1\n122.123.1.1\n1.11.1.1\n4 20",
+                  strlen("192.168.1.1\n122.123.1.1\n1.11.1.1\n 4 20"), "r");
+    EXPECT_EQ(read_server(in, &server), SUCCESS);
+    fclose(in);
+}
+
+TEST(PrintServer, NullptrServer) {
+    server_t *not_a_server = NULL;
     EXPECT_EQ(print_server(not_a_server), NULLPTR_ERROR);
 }
 
 // NETWORK TESTS BELOW
 
-TEST(INIT_NETWORK, init_test) {
+TEST(InitNetwork, InitTest) {
     EXPECT_EQ(init_network(NULL), NULLPTR_ERROR);
-    Network net;
+    network_t net;
     EXPECT_EQ(init_network(&net), SUCCESS);
     EXPECT_EQ(destroy_network(&net), SUCCESS);
 }
 
-TEST(DESTROY_NETWORK, nullptr_case) {
+TEST(DestroyNetwork, NullptrCase) {
     EXPECT_EQ(destroy_network(NULL), NULLPTR_ERROR);
 }
 
-TEST(INIT_GROUP, init_test) {
+TEST(InitGroup, InitTest) {
     EXPECT_EQ(init_group(NULL), NULLPTR_ERROR);
 
-    Group group;
+    group_t group;
     ASSERT_EQ(init_group(&group), SUCCESS);
     EXPECT_EQ(group.size, 0);
     EXPECT_FALSE(group.nets);
 }
 
-TEST(DESTROY_GROUP, group_correct_and_nullptr) {
-    Group group;
+TEST(DestroyGroup, GroupCorrectAndNullptr) {
+    group_t group;
     ASSERT_EQ(init_group(&group), SUCCESS);
     EXPECT_EQ(destroy_group(&group), SUCCESS);
     EXPECT_EQ(destroy_group(NULL), NULLPTR_ERROR);
 }
 
-TEST(ADD_TO_GROUP, every_case) {
-    Group group;
+TEST(AddToGroup, EveryCase) {
+    group_t group;
     ASSERT_EQ(init_group(&group), SUCCESS);
-    Server server;
+    server_t server;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
     ASSERT_EQ(init_server(&server, dns, ip, netmask, 6, 36), SUCCESS);
 
-    EXPECT_EQ(add_to_network(NULL, &server), NULLPTR_ERROR);
-    EXPECT_EQ(add_to_network(&group, NULL), NULLPTR_ERROR);
+    EXPECT_EQ(add_to_group(NULL, &server), NULLPTR_ERROR);
+    EXPECT_EQ(add_to_group(&group, NULL), NULLPTR_ERROR);
 
-    ASSERT_EQ(add_to_network(&group, &server), SUCCESS);
+    ASSERT_EQ(add_to_group(&group, &server), SUCCESS);
     EXPECT_EQ(group.size, 1);
     EXPECT_EQ(group.nets[0].size, 1);
-    
+
     ip[3] = 224;
     ASSERT_EQ(init_server(&server, dns, ip, netmask, 2, 20), SUCCESS);
-    ASSERT_EQ(add_to_network(&group, &server), SUCCESS);
+    ASSERT_EQ(add_to_group(&group, &server), SUCCESS);
     EXPECT_EQ(group.nets[0].size, 2);
     EXPECT_EQ(group.size, 1);
-    
+
     for (ip[3] = 223; ip[3] > 220; --ip[3]) {
         ASSERT_EQ(init_server(&server, dns, ip, netmask, 2, 20), SUCCESS);
-        ASSERT_EQ(add_to_network(&group, &server), SUCCESS);
+        ASSERT_EQ(add_to_group(&group, &server), SUCCESS);
     }
     EXPECT_EQ(destroy_group(&group), SUCCESS);
 }
 
-TEST(PRINT_BY_NETWORKS, correct) {
-    Group group;
+TEST(PrintByNetworks, Correct) {
+    group_t group;
     ASSERT_EQ(init_group(&group), SUCCESS);
-    Server server;
+    server_t server;
     uchar dns[4] = {8, 8, 4, 4};
     uchar ip[4] = {124, 68, 222, 51};
     uchar netmask[4] = {255, 255, 255, 0};
     ASSERT_EQ(init_server(&server, dns, ip, netmask, 6, 36), SUCCESS);
     for (ip[3] = 223; ip[3] > 220; --ip[3]) {
         ASSERT_EQ(init_server(&server, dns, ip, netmask, 2, 20), SUCCESS);
-        ASSERT_EQ(add_to_network(&group, &server), SUCCESS);
+        ASSERT_EQ(add_to_group(&group, &server), SUCCESS);
     }
 
     EXPECT_EQ(print_by_networks(&group), SUCCESS);
-    
+
     EXPECT_EQ(destroy_group(&group), SUCCESS);
 }
 
-TEST(PRINT_BY_NETWORKS, nullptr_test) {
-    Group group;
+TEST(PrintByNetworks, NullptrTest) {
+    group_t group;
     EXPECT_EQ(print_by_networks(NULL), NULLPTR_ERROR);
     ASSERT_EQ(init_group(&group), SUCCESS);
     EXPECT_EQ(print_by_networks(&group), NULLPTR_ERROR);
-    group.nets = static_cast<Network *>(calloc(1, sizeof(Network)));
+    group.nets = static_cast<network_t *>(calloc(1, sizeof(network_t)));
     group.size = 1;
     EXPECT_EQ(print_by_networks(&group), NULLPTR_ERROR);
     free(group.nets);

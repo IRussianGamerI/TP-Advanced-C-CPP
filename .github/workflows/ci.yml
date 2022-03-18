@@ -6,7 +6,7 @@ on:
     branches: [ making-hw-1 ]
 
 jobs:
-  tests:
+  format-check:
     runs-on: ubuntu-latest
     
     steps:
@@ -16,15 +16,6 @@ jobs:
         run: |
           sudo apt install cppcheck pip --yes
           sudo pip install cpplint
-          git clone https://github.com/google/googletest.git -b release-1.11.0
-          sudo apt update && sudo apt install valgrind
-          sudo apt install gcovr
-          cd googletest
-          mkdir build
-          cd build
-          cmake .. -DBUILD_GMOCK=OFF
-          make
-          sudo make install
 
       - name: Run cppcheck
         run: cppcheck project --enable=all --inconclusive --error-exitcode=1 -I project/include --suppress=missingIncludeSystem
@@ -32,6 +23,24 @@ jobs:
       - name: Run cpplint
         run: cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/include/* project/src/*
 
+  tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      
+      -name: Install
+        - run: |
+               git clone https://github.com/google/googletest.git -b release-1.11.0
+               sudo apt update && sudo apt install valgrind
+               sudo apt install gcovr
+               cd googletest
+               mkdir build
+               cd build
+               cmake .. -DBUILD_GMOCK=OFF
+               make
+               sudo make install
+      
       - name: Build
         run: |
           mkdir build
@@ -54,4 +63,9 @@ jobs:
           cd build
           mkdir coverage-report
           cd coverage-report
-          gcovr -r ../../ --html --html-details --filter ../../project/src/ -o coverage-report.html
+          gcovr -r ../../ --html-details --filter ../../project/src/ -o coverage-report.xml --xml
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v2
+        with:
+          token: 44f13f3e-0ded-4ca7-8ca1-6f9182297590
+          

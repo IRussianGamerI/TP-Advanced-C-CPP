@@ -3,28 +3,33 @@
 
 #include "server.h"
 
-typedef struct Network {
+#define RESIZE_RATIO 2
+#define NO_GROUP_MSG "No group provided!\n"
+
+typedef struct network {
     unsigned size;
     unsigned mem_size;
-    uchar address[4];
-    Server *servers;
-} Network;
+    uchar address[IP_SIZE];
+    server_t *servers;
+} network_t;
 
-typedef struct Group {
+typedef struct group {
     unsigned size;
-    Network *nets;
-} Group;
+    network_t *nets;
+} group_t;
 
-int init_network(Network *net);
+int init_network(network_t *net);
 
-int destroy_network(Network *net);
+int destroy_network(network_t *net);
 
-int init_group(Group *group);
+int init_group(group_t *group);
 
-int destroy_group(Group *group);
+int destroy_group(group_t *group);
 
-int add_to_network(Group *group, const Server *server);
+int add_to_network(network_t *net, const server_t *server);
 
-int print_by_networks(const Group *group);
+int add_to_group(group_t *group, const server_t *server);
+
+int print_by_networks(const group_t *group);
 
 #endif  // PROJECT_INCLUDE_GROUP_OF_NETWORKS_H_
