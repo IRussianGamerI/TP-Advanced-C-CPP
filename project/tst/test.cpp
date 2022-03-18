@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-#include "server.h"
-#include "group_of_networks.h"
+    #include "server.h"
+    #include "group_of_networks.h"
 }
 
 TEST(InitServerTest, CorrectData) {
@@ -82,7 +82,7 @@ TEST(ReadIpTest, NullptrParams) {
     const char *msg = "Nothing here";
     EXPECT_EQ(read_ip(NULL, ip, msg), NULLPTR_ERROR);
     EXPECT_EQ(read_ip(stdin, NULL, msg), NULLPTR_ERROR);
-    EXPECT_EQ(read_ip(stdin, NULL, NULL), NULLPTR_ERROR);
+    EXPECT_EQ(read_ip(stdin, ip, NULL), NULLPTR_ERROR);
 }
 
 TEST(ReadIpTest, CorrectParams) {
@@ -164,6 +164,23 @@ TEST(AddToNetwork, NullptrCases) {
     EXPECT_EQ(add_to_network(&network, NULL), NULLPTR_ERROR);
     network.servers = NULL;
     EXPECT_EQ(add_to_network(&network, &server), NULLPTR_ERROR);
+}
+
+TEST(GetNetworkAddress, Everything) {
+    server_t server;
+    uchar res[4];
+    EXPECT_EQ(get_network_address(NULL, res), NULLPTR_ERROR);
+    EXPECT_EQ(get_network_address(&server, NULL), NULLPTR_ERROR);
+    server.ip[0] = 192;
+    server.ip[1] = 168;
+    server.ip[2] = 1;
+    server.ip[3] = 124;
+    server.netmask[0] = 255;
+    server.netmask[1] = 255;
+    server.netmask[2] = 255;
+    server.netmask[3] = 0;
+    uchar dest[4];
+    ASSERT_EQ(get_network_address(&server, dest), SUCCESS);
 }
 
 TEST(InitGroup, InitTest) {
