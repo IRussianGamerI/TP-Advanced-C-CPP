@@ -157,6 +157,15 @@ TEST(DestroyNetwork, NullptrCase) {
     EXPECT_EQ(destroy_network(NULL), NULLPTR_ERROR);
 }
 
+TEST(AddToNetwork, NullptrCases) {
+    network_t network;
+    server_t server;
+    EXPECT_EQ(add_to_network(NULL, &server), NULLPTR_ERROR);
+    EXPECT_EQ(add_to_network(&network, NULL), NULLPTR_ERROR);
+    network.servers = NULL;
+    EXPECT_EQ(add_to_network(&network, &server), NULLPTR_ERROR);
+}
+
 TEST(InitGroup, InitTest) {
     EXPECT_EQ(init_group(NULL), NULLPTR_ERROR);
 

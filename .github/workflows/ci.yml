@@ -63,7 +63,7 @@ jobs:
           cd build
           mkdir coverage-report
           cd coverage-report
-          gcovr -r ../../ --html --html-details --filter ../../project/src/ -o coverage-report.html
+          gcovr -r ../../ --filter ../../project/src/ -o coverage-report.xml --xml
           
       - name: Upload coverage report
         uses: actions/upload-artifact@v2
