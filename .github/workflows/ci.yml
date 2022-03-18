@@ -28,19 +28,19 @@ jobs:
     needs: [ format-check ]
     steps:
       - uses: actions/checkout@v2
-      
-      -name: Install
-        - run: |
-               git clone https://github.com/google/googletest.git -b release-1.11.0
-               sudo apt update && sudo apt install valgrind
-               sudo apt install gcovr
-               cd googletest
-               mkdir build
-               cd build
-               cmake .. -DBUILD_GMOCK=OFF
-               make
-               sudo make install
-      
+
+      - name: Install
+        run: |
+          git clone https://github.com/google/googletest.git -b release-1.11.0
+          sudo apt update && sudo apt install valgrind
+          sudo apt install gcovr
+          cd googletest
+          mkdir build
+          cd build
+          cmake .. -DBUILD_GMOCK=OFF
+          make
+          sudo make install
+
       - name: Build
         run: |
           mkdir build
