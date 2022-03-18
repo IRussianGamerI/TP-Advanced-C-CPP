@@ -68,4 +68,4 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: 44f13f3e-0ded-4ca7-8ca1-6f9182297590
-          
+          files: ./build/coverage-report/coverage-report.xml
