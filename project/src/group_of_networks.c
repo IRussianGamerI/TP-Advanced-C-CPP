@@ -97,7 +97,7 @@ int add_to_group(group_t *group, const server_t *server) {
 
 int print_by_networks(const group_t *group) {
     if (!group) {
-        printf(NO_GROUP_MSG);
+        printf("%s", NO_GROUP_MSG);
         return NULLPTR_ERROR;
     }
     if (!group->nets) {

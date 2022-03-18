@@ -56,25 +56,25 @@ int extract_ip(const char *from, uchar *to) {
     }
     strncpy(from_cpy, from, 15);
     if (str_count(from_cpy, '.') != 3) {
-        printf(IP_INCORRECT_MSG);
+        printf("%s", IP_INCORRECT_MSG);
         free(origin);
         return INCORRECT_INPUT;
     }
     char *cur = strtok_r(from_cpy, ".", &from_cpy);
     if (!cur) {
-        printf(IP_INCORRECT_MSG);
+        printf("%s", IP_INCORRECT_MSG);
         free(origin);
         return INCORRECT_INPUT;
     }
     if (strnlen(cur, IP_SIZE) > 3) {
-        printf(IP_INCORRECT_MSG);
+        printf("%s", IP_INCORRECT_MSG);
         free(origin);
         return INCORRECT_INPUT;
     }
     unsigned byte;
     byte = strtoul(cur, NULL, 10);
     if (byte > 255) {
-        printf(IP_INCORRECT_MSG);
+        printf("%s", IP_INCORRECT_MSG);
         free(origin);
         return INCORRECT_INPUT;
     }
@@ -82,13 +82,13 @@ int extract_ip(const char *from, uchar *to) {
     for (int i = 1; i < IP_SIZE; ++i) {
         cur = strtok_r(from_cpy, ".", &from_cpy);
         if (strnlen(cur, IP_SIZE) > 3) {
-            printf(IP_INCORRECT_MSG);
+            printf("%s", IP_INCORRECT_MSG);
             free(origin);
             return INCORRECT_INPUT;
         }
         byte = strtoul(cur, NULL, 10);
         if (byte > 255) {
-            printf(IP_INCORRECT_MSG);
+            printf("%s", IP_INCORRECT_MSG);
             free(origin);
             return INCORRECT_INPUT;
         }
