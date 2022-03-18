@@ -1,0 +1,73 @@
+on:
+  push:
+    branches: [ making-hw-1 ]
+  
+  pull_request:
+    branches: [ making-hw-1 ]
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: |
+          sudo apt install cppcheck pip --yes
+          sudo pip install cpplint
+
+      - name: Run cppcheck
+        run: cppcheck project --enable=all --inconclusive --error-exitcode=1 -I project/include --suppress=missingIncludeSystem
+
+      - name: Run cpplint
+        run: cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/include/* project/src/*
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: [ format-check ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: |
+          git clone https://github.com/google/googletest.git -b release-1.11.0
+          sudo apt update && sudo apt install valgrind
+          pip install gcovr
+          cd googletest
+          mkdir build
+          cd build
+          cmake .. -DBUILD_GMOCK=OFF
+          make
+          sudo make install
+
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: Run GTest
+        run: |
+          cd build
+          ./test_lib
+
+      - name: Run GTest with Valgrind
+        run: |
+          cd build
+          valgrind --tool=memcheck --leak-check=full ./test_lib
+
+      - name: Coverage
+        run: |
+          cd build
+          mkdir coverage-report
+          cd coverage-report
+          gcovr -r ../../ --filter ../../project/src/group_of_networks.c --filter ../../project/src/server.c -o coverage-report.xml --xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: 44f13f3e-0ded-4ca7-8ca1-6f9182297590
+          files: ./build/coverage-report/coverage-report.xml
+            
