@@ -13,7 +13,7 @@ typedef enum ERRORS {
     NULLPTR_ERROR,
     PIPE_ERROR,
     ALLOC_ERROR
-} error_t;
+} err_t;
 
 typedef struct vector {
     unsigned capacity;
@@ -21,19 +21,19 @@ typedef struct vector {
     int *array;
 } vector_t;
 
-error_t create_vector(vector_t* v);
+err_t create_vector(vector_t* v);
 
-error_t push_back(vector_t* v, int element);
+err_t push_back(vector_t* v, int element);
 
-error_t delete_vector(vector_t* v);
+err_t delete_vector(vector_t* v);
 
-error_t read_vector(vector_t* v, FILE* in);
+err_t read_vector(vector_t* v, FILE* in);
 
 typedef struct time_diff {
     int time;
     int diff;
 } time_diff_t;
 
-error_t find_max_diff(const int *array, int size, time_diff_t *result);
+err_t find_max_diff(const int *array, int size, time_diff_t *result);
 
 #endif  // COMMON_COMMON_H_

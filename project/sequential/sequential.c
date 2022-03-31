@@ -1,6 +1,6 @@
-#include "common.h"
+#include "../common/common.h"
 
-error_t find_max_diff(const int *array, int size, time_diff_t *result) {
+err_t find_max_diff(const int *array, int size, time_diff_t *result) {
     if (!array || !result) {
         return NULLPTR_ERROR;
     }
@@ -13,8 +13,8 @@ error_t find_max_diff(const int *array, int size, time_diff_t *result) {
     int max_diff = 0;
     int time = 0;
 
-    error_t flag = NOT_FOUND;
-    for (int i = 0; i < size; ++i) {
+    err_t flag = NOT_FOUND;
+    for (int i = 1; i < size; ++i) {
         if (array[i] - array[i - 1] > max_diff) {
             max_diff = array[i] - array[i - 1];
             time = i;

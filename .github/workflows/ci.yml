@@ -1,0 +1,42 @@
+on:
+  push:
+    branches: [ making-hw-2 ]
+  
+  pull_request:
+    branches: [ making-hw-2 ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install
+        run: |
+          sudo apt install
+          sudo install cppcheck pip valgrind gcovr
+          sudo pip install cpplint
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+      - name: cppcheck
+        run: |
+          cppcheck --enable=all --error-exitcode=1 --language=c --inconclusive project/common/ project/parallel/ project/sequential/ project/main.c --suppress=missingInclude
+      - name: cpplint
+        run: |
+          cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/common/* project/parallel/* project/sequential/* project/main.c
+      - name: Run tests
+        run: |
+          cd build
+          ./test_common
+          ./test_sequential
+          ./test_parallel
+      - name: Run tests with valgrind
+        run: |
+          cd build
+          valgrind --tool=memcheck --leak-check=full ./test_common
+          valgrind --tool=memcheck --leak-check=full ./test_sequential
+          valgrind --tool=memcheck --leak-check=full ./test_parallel

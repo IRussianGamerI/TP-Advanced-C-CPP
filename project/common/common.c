@@ -4,20 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-error_t create_vector(vector_t *v) {
+err_t create_vector(vector_t *v) {
     if (!v) {
         return NULLPTR_ERROR;
     }
     v->capacity = 1;
     v->size = 0;
-    v->array = (int *) calloc(sizeof(int), 1);
+    v->array = calloc(sizeof(int), 1);
     if (!v->array) {
         return ALLOC_ERROR;
     }
     return SUCCESS;
 }
 
-error_t push_back(vector_t *v, int element) {
+err_t push_back(vector_t *v, int element) {
     if (!v || !v->array) {
         return NULLPTR_ERROR;
     }
@@ -34,7 +34,7 @@ error_t push_back(vector_t *v, int element) {
     return SUCCESS;
 }
 
-error_t delete_vector(vector_t* v) {
+err_t delete_vector(vector_t* v) {
     if (!v || !v->array) {
         return NULLPTR_ERROR;
     }
@@ -44,18 +44,17 @@ error_t delete_vector(vector_t* v) {
     return SUCCESS;
 }
 
-error_t read_vector(vector_t* v, FILE* in) {
+err_t read_vector(vector_t* v, FILE* in) {
     if (!v || !in) {
         return NULLPTR_ERROR;
     }
     char buf[MAX_INT_LEN];
     fgets(buf, MAX_INT_LEN, in);
     size_t count = strtol(buf, NULL, 10);
-    int number;
     for (size_t i = 0; i < count; ++i) {
         fgets(buf, MAX_INT_LEN, in);
-        number = strtol(buf, NULL, 10);
-        if (!push_back(v, number)) {
+        int number = strtol(buf, NULL, 10);
+        if (push_back(v, number) != SUCCESS) {
             return ALLOC_ERROR;
         }
     }
