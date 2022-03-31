@@ -16,6 +16,15 @@ jobs:
           sudo apt-get update
           sudo apt install cppcheck pip valgrind gcovr
           sudo pip install cpplint
+          git clone https://github.com/google/googletest.git -b release-1.11.0
+          sudo apt update && sudo apt install valgrind
+          pip install gcovr
+          cd googletest
+          mkdir build
+          cd build
+          cmake .. -DBUILD_GMOCK=OFF
+          make
+          sudo make install
       - name: Build
         run: |
           mkdir build
