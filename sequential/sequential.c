@@ -1,23 +1,27 @@
-#include "sequential.h"
+#include "common.h"
 
-int find_max_diff_seq(int *array, int len) {
-    return find_max_diff_on_section(array, 0, len);
-}
-
-int find_max_diff_on_section(int *array, int begin, int end) {
-    if (left_pos < 0 || right_pos < 2) {
+error_t find_max_diff(const int *array, int size, time_diff_t *result) {
+    if (!array || !result) {
+        return NULLPTR_ERROR;
+    }
+    if (size < 2) {
+        result->diff = 0;
+        result->time = 0;
         return WRONG_PARAMS;
     }
-    if (!array) {
-        return NULLPTR;
-    }
+
     int max_diff = 0;
-    int ans = 0;
-    for (int i = 1; i < right_pos; ++i) {
+    int time = 0;
+
+    error_t flag = NOT_FOUND;
+    for (int i = 0; i < size; ++i) {
         if (array[i] - array[i - 1] > max_diff) {
             max_diff = array[i] - array[i - 1];
-            ans = i;
+            time = i;
+            flag = SUCCESS;
         }
     }
-    return ans;  // Returns 0 if no positive diff was found
+    result->diff = max_diff;
+    result->time = time;
+    return flag;
 }
