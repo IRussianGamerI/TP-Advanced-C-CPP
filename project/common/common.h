@@ -1,5 +1,5 @@
-#ifndef COMMON_COMMON_H_
-#define COMMON_COMMON_H_
+#ifndef PROJECT_COMMON_COMMON_H_
+#define PROJECT_COMMON_COMMON_H_
 
 #include <stdio.h>
 
@@ -36,4 +36,4 @@ typedef struct time_diff {
 
 err_t find_max_diff(const int *array, int size, time_diff_t *result);
 
-#endif  // COMMON_COMMON_H_
+#endif  // PROJECT_COMMON_COMMON_H_
