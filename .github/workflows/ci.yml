@@ -13,8 +13,7 @@ jobs:
       
       - name: Install
         run: |
-          sudo apt install
-          sudo install cppcheck pip valgrind gcovr
+          sudo apt install cppcheck pip valgrind gcovr
           sudo pip install cpplint
       - name: Build
         run: |
