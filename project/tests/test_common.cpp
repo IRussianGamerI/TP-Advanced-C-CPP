@@ -4,7 +4,7 @@ extern "C" {
     #include "common.h"
 }
 
-constexpr const char *TEST_VEC_READ_FILENAME = "project/samples/default.tst";
+constexpr const char *TEST_VEC_READ_FILENAME = "../project/samples/default.tst";
 constexpr unsigned EXPECTED_CAPACITY = 16;
 constexpr unsigned EXPECTED_SIZE = 10;
 

@@ -4,7 +4,6 @@
 #include "common.h"
 
 #define NUMBER_PIPE_DESC 2
-#define MAX_TWO_INTS_LEN 24  // Length of a string like "-MAX_INT -MAX_INT"
 
 int **alloc_pipes(int amount);
 

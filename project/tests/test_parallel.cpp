@@ -5,7 +5,7 @@ extern "C" {
     #include "parallel.h"
 }
 
-constexpr const char *DEFAULT_SAMPLE_FILENAME = "project/samples/default.tst";
+constexpr const char *DEFAULT_SAMPLE_FILENAME = "../project/samples/default.tst";
 
 TEST(AllocPipes, WrongParam) {
     ASSERT_FALSE(alloc_pipes(0));
@@ -35,6 +35,7 @@ TEST(FindMaxDiffOnSection, WrongParams) {
 TEST(FindMaxDiffOnSection, CorrectParams) {
     vector_t vec;
     FILE *input = fopen(DEFAULT_SAMPLE_FILENAME, "r");
+    ASSERT_TRUE(input);
     ASSERT_EQ(create_vector(&vec), SUCCESS);
     EXPECT_EQ(read_vector(&vec, input), SUCCESS);
     fclose(input);
@@ -60,10 +61,11 @@ TEST(FindMaxDiff, WrongParams) {
 }
 
 TEST(FindMaxDiff, CorrectParams) {
-    vector_t vec;
-    FILE *input = fopen(DEFAULT_SAMPLE_FILENAME, "r");
+    vector_t vec;    
     ASSERT_EQ(create_vector(&vec), SUCCESS);
-    EXPECT_EQ(read_vector(&vec, input), SUCCESS);
+    FILE *input = fopen(DEFAULT_SAMPLE_FILENAME, "r");
+    ASSERT_TRUE(input);
+    ASSERT_EQ(read_vector(&vec, input), SUCCESS);
     fclose(input);
     time_diff_t result;
     EXPECT_EQ(find_max_diff(vec.array, vec.size, &result), SUCCESS);

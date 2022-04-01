@@ -22,8 +22,7 @@ err_t push_back(vector_t *v, int element) {
         return NULLPTR_ERROR;
     }
     if (v->capacity == v->size) {
-        int *ptr;
-        ptr = realloc(v->array, 2 * v->capacity * sizeof(int));
+        int *ptr = realloc(v->array, 2 * v->capacity * sizeof(int));
         if (!ptr) {
             return ALLOC_ERROR;
         }
