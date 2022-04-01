@@ -51,6 +51,15 @@ TEST(FindMaxDiffOnSection, CorrectParams) {
     EXPECT_EQ(find_max_diff_on_section(sample, 0, 5, &result), NOT_FOUND);
 }
 
+TEST(FindMaxFromPipes, WrongParams) {
+    EXPECT_EQ(find_max_from_pipes(nullptr, 1, nullptr), NULLPTR_ERROR);
+    int **pipes = static_cast<int **>(calloc(sizeof(int *), 6));
+    time_diff_t result;
+    EXPECT_EQ(find_max_from_pipes(pipes, 0, &result), WRONG_PARAMS);
+    EXPECT_EQ(find_max_from_pipes(pipes, 6, &result), NULLPTR_ERROR);
+    free(pipes);
+}
+
 TEST(FindMaxDiff, WrongParams) {
     int *array = static_cast<int *>(calloc(10, sizeof(int)));
     time_diff_t result;
@@ -73,8 +82,6 @@ TEST(FindMaxDiff, CorrectParams) {
     EXPECT_EQ(result.time, 9);
     EXPECT_EQ(delete_vector(&vec), SUCCESS);
 }
-
-// Tests will be implemented soon
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
