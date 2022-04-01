@@ -64,8 +64,8 @@ err_t find_max_diff(const int *array, int size, time_diff_t *result) {
             write(pipes[i][1], &local_max, sizeof(local_max));
             close(pipes[i][1]);
             free(waiters);
-            for (int i = 0; i < amount; ++i) {
-                free(pipes[i]);
+            for (int j = 0; j < amount; ++j) {
+                free(pipes[j]);
             }
             free(pipes);
             exit(EXIT_SUCCESS);
