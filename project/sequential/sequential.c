@@ -1,4 +1,4 @@
-#include "../common/common.h"
+#include "common.h"
 
 err_t find_max_diff(const int *array, int size, time_diff_t *result) {
     if (!array || !result) {

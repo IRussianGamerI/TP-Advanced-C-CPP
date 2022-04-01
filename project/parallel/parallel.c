@@ -60,7 +60,7 @@ err_t find_max_diff(const int *array, int size, time_diff_t *result) {
             close(pipes[i][0]);
             time_diff_t local_max;
             find_max_diff_on_section(array, section_len * i, i < amount - 1 ? section_len * (i + 1) + 1 :
-                                     size - section_len * i, &local_max);
+                                     size, &local_max);
             write(pipes[i][1], &local_max, sizeof(local_max));
             close(pipes[i][1]);
             exit(EXIT_SUCCESS);
@@ -71,7 +71,13 @@ err_t find_max_diff(const int *array, int size, time_diff_t *result) {
     for (int i = 0; i < amount; ++i) {
         waitpid(waiters[i], NULL, 0);
     }
-    return find_max_from_pipes(pipes, amount, result);
+    free(waiters);
+    err_t return_code = find_max_from_pipes(pipes, amount, result);
+    for (int i = 0; i < amount; ++i) {
+        free(pipes[i]);
+    }
+    free(pipes);
+    return return_code;
 }
 
 err_t find_max_from_pipes(int **pipes, int amount, time_diff_t *result) {
@@ -104,7 +110,7 @@ err_t find_max_diff_on_section(const int *array, int begin, int end, time_diff_t
     if (!array || !result) {
         return NULLPTR_ERROR;
     }
-    if (end - begin < 1) {
+    if (end - begin < 2) {
         result->diff = 0;
         result->time = 0;
         return WRONG_PARAMS;

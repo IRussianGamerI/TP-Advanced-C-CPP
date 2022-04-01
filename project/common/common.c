@@ -41,6 +41,7 @@ err_t delete_vector(vector_t* v) {
     free(v->array);
     v->size = 0;
     v->capacity = 0;
+    v->array = NULL;
     return SUCCESS;
 }
 

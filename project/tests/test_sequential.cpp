@@ -26,6 +26,10 @@ TEST(FindMaxDiff, CorrectParams) {
     EXPECT_EQ(find_max_diff(array, 10, &res), SUCCESS);
     EXPECT_EQ(res.time, 9);
     EXPECT_EQ(res.diff, 256);
+    for (int i = 0; i < 10; ++i) {
+        array[i] = 10 - i;
+    }
+    EXPECT_EQ(find_max_diff(array, 10, &res), NOT_FOUND);
     free(array);
 }
 
