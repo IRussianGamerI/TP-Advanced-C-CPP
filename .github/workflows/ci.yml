@@ -51,8 +51,9 @@ jobs:
           cd build
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_common
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_sequential
-          valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_parallel
-          # here may be some reachable stuff from gtest
+          valgrind --tool=memcheck --leak-check=full --show-reachable=yes --child-silent-after-fork=yes ./test_parallel
+          # Trust me, I free all the memory allocated in child process and in function body containing "fork()"
+          # I need this --child-silent-after-fork=yes flag to suppress warnings about data I am unable to free
       - name: Stress tests & Comparison
         run: |
           mkdir comp_res
