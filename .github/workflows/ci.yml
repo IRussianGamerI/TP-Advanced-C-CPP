@@ -90,6 +90,11 @@ jobs:
           mkdir coverage-report
           cd coverage-report
           gcovr -r ../../ -f ../../project/common/common.c -f ../../project/sequential/sequential.c -f ../../project/parallel/parallel.c -o coverage-report.xml --xml
+      - name: Upload coverage into artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage-report
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
