@@ -14,7 +14,7 @@ jobs:
       - name: Install
         run: |
           sudo apt-get update
-          sudo apt install cppcheck pip valgrind gcovr
+          sudo apt install cppcheck pip valgrind gcovr clang-tidy
           sudo pip install cpplint
           git clone https://github.com/google/googletest.git -b release-1.11.0
           sudo apt update && sudo apt install valgrind
@@ -37,6 +37,9 @@ jobs:
       - name: cpplint
         run: |
           cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/common/* project/parallel/* project/sequential/* project/main.c
+      - name: clang-tidy
+        run: |
+          clang-tidy project/common/* project/parallel/* project/sequential/* -warnings-as-errors=* -extra-arg=-std=c99 -- -Iproject/common -Iproject/parallel
       - name: Run tests
         run: |
           cd build
@@ -49,6 +52,7 @@ jobs:
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_common
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_sequential
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_parallel
+          # here may be some reachable stuff from gtest
       - name: Stress tests & Comparison
         run: |
           mkdir comp_res
