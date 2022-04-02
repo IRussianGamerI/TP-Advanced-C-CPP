@@ -19,7 +19,13 @@ target_include_directories(lib_dynamic PUBLIC project/parallel)
 target_link_libraries(lib_dynamic lib_common)
 
 add_executable(main project/main.c)
-target_link_libraries(main lib_static lib_common)
+
+option(IS_STATIC "Link static library" ON)
+if (IS_STATIC)
+    target_link_libraries(main lib_static lib_common)
+else ()
+    target_link_libraries(main lib_dynamic lib_common)
+endif ()
 
 ENABLE_TESTING()
 

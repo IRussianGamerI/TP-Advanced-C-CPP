@@ -7,9 +7,9 @@ extern "C" {
 TEST(FindMaxDiff, WrongParams) {
     int *array = static_cast<int *>(malloc(sizeof(int)));
     time_diff_t result;
-    EXPECT_EQ(find_max_diff(NULL, 10, NULL), NULLPTR_ERROR);
-    EXPECT_EQ(find_max_diff(array, 10, NULL), NULLPTR_ERROR);
-    EXPECT_EQ(find_max_diff(NULL, 10, &result), NULLPTR_ERROR);
+    EXPECT_EQ(find_max_diff(nullptr, 10, nullptr), NULLPTR_ERROR);
+    EXPECT_EQ(find_max_diff(array, 10, nullptr), NULLPTR_ERROR);
+    EXPECT_EQ(find_max_diff(nullptr, 10, &result), NULLPTR_ERROR);
     EXPECT_EQ(find_max_diff(array, 1, &result), WRONG_PARAMS);
     EXPECT_EQ(result.time, 0);
     EXPECT_EQ(result.diff, 0);

@@ -4,13 +4,13 @@ on:
   
   pull_request:
     branches: [ making-hw-2 ]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Install
         run: |
           sudo apt-get update
@@ -49,6 +49,36 @@ jobs:
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_common
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_sequential
           valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_parallel
+      - name: Stress tests & Comparison
+        run: |
+          mkdir comp_res
+          mkdir build_static
+          cd build_static
+          cmake ..
+          make main
+          cd ..
+          mkdir build_dynamic
+          cd build_dynamic
+          cmake .. -DIS_STATIC=OFF
+          make main
+          cd ..
+          
+          python3 project/samples/gen.py 100000 -50 120 project/samples/sample1.txt
+          ./build_static/main -i project/samples/sample1.txt -o comp_res/static_res1.txt
+          ./build_dynamic/main -i project/samples/sample1.txt -o comp_res/dynamic_res1.txt
+          
+          python3 project/samples/gen.py 1000000 -50 120 project/samples/sample2.txt
+          ./build_static/main -i project/samples/sample2.txt -o comp_res/static_res2.txt
+          ./build_dynamic/main -i project/samples/sample2.txt -o comp_res/dynamic_res2.txt
+          
+          python3 project/samples/gen.py 26214400 -50 120 project/samples/sample3.txt
+          ./build_static/main -i project/samples/sample3.txt -o comp_res/static_res3.txt
+          ./build_dynamic/main -i project/samples/sample3.txt -o comp_res/dynamic_res3.txt
+      - name: Upload results of comparison
+        uses: actions/upload-artifact@v2
+        with:
+          name: comp_res
+          path: comp_res
       - name: Coverage
         run: |
           cd build

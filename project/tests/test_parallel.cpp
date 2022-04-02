@@ -70,11 +70,14 @@ TEST(FindMaxDiff, WrongParams) {
 }
 
 TEST(FindMaxDiff, CorrectParams) {
-    vector_t vec;    
-    ASSERT_EQ(create_vector(&vec), SUCCESS);
+    vector_t vec;
+    EXPECT_EQ(create_vector(&vec), SUCCESS);
     FILE *input = fopen(DEFAULT_SAMPLE_FILENAME, "r");
-    ASSERT_TRUE(input);
-    ASSERT_EQ(read_vector(&vec, input), SUCCESS);
+    if (!input) {
+        delete_vector(&vec);
+        return;
+    }
+    EXPECT_EQ(read_vector(&vec, input), SUCCESS);
     fclose(input);
     time_diff_t result;
     EXPECT_EQ(find_max_diff(vec.array, vec.size, &result), SUCCESS);

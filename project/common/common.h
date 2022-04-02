@@ -3,9 +3,7 @@
 
 #include <stdio.h>
 
-#define MB 1 << 20  // Megabyte is equal to 2^20 bytes
 #define MAX_INT_LEN 12
-#define SAMPLE_FILENAME "../project/samples/sample1.txt"
 
 typedef enum ERRORS {
     SUCCESS = 0,
