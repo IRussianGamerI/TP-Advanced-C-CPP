@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
         switch (opt) {
             case 'i':
                 input = calloc((strlen(optarg) + 1), sizeof(char));
-                snprintf(input, strlen(optarg), "%s", optarg);
+                snprintf(input, strlen(optarg) + 1, "%s", optarg);
                 break;
             case 'o':
                 output = calloc((strlen(optarg) + 1), sizeof(char));
-                snprintf(output, strlen(optarg), "%s", optarg);
+                snprintf(output, strlen(optarg) + 1, "%s", optarg);
                 break;
             case 'h':
                 printf("Usage: %s [-h|-i|-o] <args>\n", argv[0]);
