@@ -94,7 +94,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
-          path: coverage-report
+          path: build/coverage-report
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
