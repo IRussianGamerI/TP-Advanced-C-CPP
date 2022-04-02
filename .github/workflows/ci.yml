@@ -1,0 +1,102 @@
+on:
+  push:
+    branches: [ making-hw-2 ]
+  
+  pull_request:
+    branches: [ making-hw-2 ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: |
+          sudo apt-get update
+          sudo apt install cppcheck pip valgrind gcovr clang-tidy
+          sudo pip install cpplint
+          git clone https://github.com/google/googletest.git -b release-1.11.0
+          sudo apt update && sudo apt install valgrind
+          pip install gcovr
+          cd googletest
+          mkdir build
+          cd build
+          cmake .. -DBUILD_GMOCK=OFF
+          make
+          sudo make install
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+      - name: cppcheck
+        run: |
+          cppcheck --enable=all --error-exitcode=1 --language=c --inconclusive project/common/ project/parallel/ project/sequential/ project/main.c --suppress=missingInclude
+      - name: cpplint
+        run: |
+          cpplint --extensions="c,h" --filter="-build/include_subdir,-legal/copyright" --linelength=120 project/common/* project/parallel/* project/sequential/* project/main.c
+      - name: clang-tidy
+        run: |
+          clang-tidy project/common/* project/parallel/* project/sequential/* -warnings-as-errors=* -extra-arg=-std=c99 -- -Iproject/common -Iproject/parallel
+      - name: Run tests
+        run: |
+          cd build
+          ./test_common
+          ./test_sequential
+          ./test_parallel
+      - name: Run tests with valgrind
+        run: |
+          cd build
+          valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_common
+          valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./test_sequential
+          valgrind --tool=memcheck --leak-check=full --show-reachable=yes --child-silent-after-fork=yes ./test_parallel
+          # Trust me, I free all the memory allocated in child process and in function body containing "fork()"
+          # I need this --child-silent-after-fork=yes flag to suppress warnings about data I am unable to free
+      - name: Stress tests & Comparison
+        run: |
+          mkdir comp_res
+          mkdir build_static
+          cd build_static
+          cmake ..
+          make main
+          cd ..
+          mkdir build_dynamic
+          cd build_dynamic
+          cmake .. -DIS_STATIC=OFF
+          make main
+          cd ..
+          
+          python3 project/samples/gen.py 100000 -50 120 project/samples/sample1.txt
+          ./build_static/main -i project/samples/sample1.txt -o comp_res/static_res1.txt
+          ./build_dynamic/main -i project/samples/sample1.txt -o comp_res/dynamic_res1.txt
+          
+          python3 project/samples/gen.py 1000000 -50 120 project/samples/sample2.txt
+          ./build_static/main -i project/samples/sample2.txt -o comp_res/static_res2.txt
+          ./build_dynamic/main -i project/samples/sample2.txt -o comp_res/dynamic_res2.txt
+          
+          python3 project/samples/gen.py 26214400 -50 120 project/samples/sample3.txt
+          ./build_static/main -i project/samples/sample3.txt -o comp_res/static_res3.txt
+          ./build_dynamic/main -i project/samples/sample3.txt -o comp_res/dynamic_res3.txt
+      - name: Upload results of comparison
+        uses: actions/upload-artifact@v2
+        with:
+          name: comp_res
+          path: comp_res
+      - name: Coverage
+        run: |
+          cd build
+          mkdir coverage-report
+          cd coverage-report
+          gcovr -r ../../ -f ../../project/common/common.c -f ../../project/sequential/sequential.c -f ../../project/parallel/parallel.c -o coverage-report.xml --xml
+      - name: Upload coverage into artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: build/coverage-report
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: 44f13f3e-0ded-4ca7-8ca1-6f9182297590
+          files: ./build/coverage-report/coverage-report.xml
